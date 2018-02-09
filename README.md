@@ -96,6 +96,8 @@
 
   [moer information about smartconfig](https://steemit.com/utopian-io/@cha0s0000/esp8266-tutorials-esp8266)
 
+  ![](https://steemitimages.com/DQmU99HZiGNQwjDYGrrCb8dT4KvQqZ5hceshQcDtyuxQ9XN/%E5%9B%BE%E7%89%87.png)
+
 - Power on and control it
 
   ![GIF.gif](https://steemitimages.com/DQmYaPRYHNLxAKbQ4egJp7AieSAii3HZiqG1E8GoK51VPV2/GIF.gif)
