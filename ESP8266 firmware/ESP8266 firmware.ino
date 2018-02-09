@@ -7,7 +7,7 @@
 #define AIRKISS 4
 int led_state = HIGH;
 bool ledState = 0;
-const char* host = "192.168.1.102";
+const char* host = "192.168.0.102";
 const int tcpPort = 8282;
 unsigned char Re_buf[11], counter = 0, sign_one = 0, sign_two = 0, sign_three = 0, data_buf[30], data_count = 0, check_data = 0;
 unsigned char rec, check_data_get, ID = 0,dump_sign=0;
@@ -27,87 +27,6 @@ void flip()
 
 }
 
-void data_display()
-{
-  data_pm = data_buf[0] << 8 ;
-  data_pm  = data_pm + data_buf[1];
-  data_co = data_buf[2] << 8 ;
-  data_co = data_co  + data_buf[3];
-  data_pwm = data_buf[4];
-  data_temp = data_buf[5];
-  data_switch = data_buf[6];
-}
-
-void data_receive()
-{
-  counter = 0; data_count = 0; sign_one = 0; sign_two = 0; sign_three = 0; check_data = 0; data_length = 0;
-  for (i = 0; i < 20; i++)
-  {
-    data_buf[i] = 0;
-    Re_buf[i] = 0;
-  }
-  //   Serial.println( counter);
-  while (Serial.available()) {
-    if (counter > 16 )  return;
-
-    Re_buf[counter] = (unsigned char)Serial.read();
-    if ( sign_one == 0 && Re_buf[counter] == 0x4f)
-    {
-      sign_one = 1;
-    }
-    else  if (sign_one == 1 && sign_two == 0 )
-    {
-      if (sign_two == 0 && Re_buf[counter] == 0x4b)
-      {
-        sign_two = 1;
-      }
-    }
-
-    else if (sign_one == 1 && sign_two == 1 )
-    {
-      if (sign_three == 0)
-      {
-        if (Re_buf[counter] == 0x80) sign_three = 1;
-      }
-      else if (sign_three == 1)
-      {
-        if (data_length == 0)
-        {
-          data_length =  Re_buf[counter];
-
-        }
-        else
-        {
-          if (data_count < data_length)
-          {
-            data_buf[data_count] =  Re_buf[counter];
-            data_count++;
-
-          }
-          else
-          {
-            check_data = Re_buf[counter];
-
-          }
-        }
-      }
-    }
-    //    Serial.println( Re_buf[counter]);
-    counter++;
-  }
-
-  if (counter)
-  {
-    data_display();
-    client.print(String("AA") + ID + String("BB") + data_pm +
-                 String("CC") + data_co + String("DD") + data_pwm +
-                 String("EE") + data_temp + String("FF") + data_switch +
-                 String("GG") + check_data +  String("HH"));
-    //             client.print(data_pm+String("AA")+data_pm+String("BB"));
-//    client.flush();
-    dump_sign =1;
-  }
-}
 void smartconfig()
 {
   ESP.eraseConfig();
@@ -176,6 +95,11 @@ void waitKey()
   digitalWrite(STATE_GREEN, 0);
   pinMode (STATE_BLUE, OUTPUT);
   pinMode (STATE_GREEN, OUTPUT);
+  pinMode (5, OUTPUT);
+  pinMode (4, OUTPUT);
+  pinMode (0, OUTPUT);
+  pinMode (2, OUTPUT);
+
 }
 
 void connTick()
@@ -206,7 +130,7 @@ void connTick()
 //        client.flush();
       }
       digitalWrite(STATE_RED, 1);
-      if(client.available())
+      while(client.available())
       {
 //          String line = client.readStringUntil('{');
           
@@ -218,88 +142,38 @@ void connTick()
             Serial.print(recv);
             if(recv == '1')
             {
-              unsigned char hexdata[7] = {0x4f,0x4b,0x81,0x02,0x01,0x01,0x00};
-              Serial.write(hexdata,7);
+              digitalWrite(5, 1);
               }
               else  if(recv == '2')
             {
-              unsigned char hexdata[7] = {0x4f,0x4b,0x81,0x02,0x01,0x00,0x00};
-              Serial.write(hexdata,7);
+               digitalWrite(5, 0);
               }
                else  if(recv == '3')
             {
-              unsigned char hexdata[7] = {0x4f,0x4b,0x81,0x02,0x02,0x01,0x00};
-              Serial.write(hexdata,7);
+               digitalWrite(4, 1);
               }
                else  if(recv == '4')
             {
-              unsigned char hexdata[7] = {0x4f,0x4b,0x81,0x02,0x02,0x00,0x00};
-              Serial.write(hexdata,7);
+               digitalWrite(4, 0);
               }
                else  if(recv == '5')
             {
-              unsigned char hexdata[7] = {0x4f,0x4b,0x81,0x02,0x03,0x01,0x00};
-              Serial.write(hexdata,7);
+               digitalWrite(0, 1);
               }
                else  if(recv == '6')
             {
-              unsigned char hexdata[7] = {0x4f,0x4b,0x81,0x02,0x03,0x00,0x00};
-              Serial.write(hexdata,7);
+               digitalWrite(0, 0);
               }
                else  if(recv == '7')
             {
-              unsigned char hexdata[7] = {0x4f,0x4b,0x81,0x02,0x04,0x01,0x00};
-              Serial.write(hexdata,7);
+               digitalWrite(2, 1);
               }
                else  if(recv == '8')
             {
-              unsigned char hexdata[7] = {0x4f,0x4b,0x81,0x02,0x04,0x00,0x00};
-              Serial.write(hexdata,7);
+               digitalWrite(2, 0);
               }
-               else  if(recv == '9')
-            {
-              unsigned char hexdata[7] = {0x4f,0x4b,0x81,0x02,0x05,0x01,0x00};
-              Serial.write(hexdata,7);
-              }
-               else  if(recv == '0')
-            {
-              unsigned char hexdata[7] = {0x4f,0x4b,0x81,0x02,0x05,0x00,0x00};
-              Serial.write(hexdata,7);
-              }
-               else  if(recv == 'A')
-            {
-              unsigned char hexdata[6] = {0x4f,0x4b,0x82,0x01,0x00,0x00};
-              Serial.write(hexdata,6);
-              }
-
-               else  if(recv == 'B')
-            {
-              unsigned char hexdata[6] = {0x4f,0x4b,0x82,0x01,0x14,0x00};
-              Serial.write(hexdata,6);
-              }
-               else  if(recv == 'C')
-            {
-              unsigned char hexdata[6] = {0x4f,0x4b,0x82,0x01,0x28,0x00};
-              Serial.write(hexdata,6);
-              }
-               else  if(recv == 'D')
-            {
-              unsigned char hexdata[6] = {0x4f,0x4b,0x82,0x01,0x3c,0x00};
-              Serial.write(hexdata,6);
-              }
-               else  if(recv == 'E')
-            {
-              unsigned char hexdata[6] = {0x4f,0x4b,0x82,0x01,0x50,0x00};
-              Serial.write(hexdata,6);
-              }
-               else  if(recv == 'F')
-            {
-              unsigned char hexdata[6] = {0x4f,0x4b,0x82,0x01,0x64,0x00};
-              Serial.write(hexdata,6);
-              }
-      
-
               
+              break;
            }
           
         }
@@ -327,12 +201,16 @@ void setup() {
 
 void loop() {
 
-  data_receive();
+//  data_receive();
+   client.print(String("AA") + ID + String("BB") + data_pm +
+                 String("CC") + data_co + String("DD") + data_pwm +
+                 String("EE") + data_temp + String("FF") + data_switch +
+                 String("GG") + check_data +  String("HH"));
 
 
   connTick();
   //  client.print("ok");
-  delay(1000);
+//  delay(1000);
 
 
 }
