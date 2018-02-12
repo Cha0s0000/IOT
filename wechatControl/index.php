@@ -17,7 +17,7 @@
 		if(checkSignature())
 		{
 			$echostr = $_GET["echostr"];
-             header('content-type:text');//...........
+             header('content-type:text');
 			echo $echostr;
 			exit;
 		}
@@ -157,32 +157,15 @@
 				break;
 		}	
 	}	
-																				//接入数据库加入控制！！！！！！！！！！！！！！！！！！
-	//接收文本消息
-																				//一个函数只能一个return!!!!!!!!!!!!!!!!!!!!!
+																			
+																				
 	function receiveText($obj){
         $content = $obj ->Content;
-        //$content1 = "温度";
-        																				//温度查看
-        if (strstr($content, "温度")) {
-        $con = mysql_connect(SAE_MYSQL_HOST_M.':'.SAE_MYSQL_PORT,SAE_MYSQL_USER,SAE_MYSQL_PASS); 
-        mysql_select_db("app_smart8266", $con);//修改数据库名
- 
-    	$result = mysql_query("SELECT * FROM sensor");//"SELECT * FROM humidity"
-        while($arr = mysql_fetch_array($result)){
-          if ($arr['ID'] == 1) {
-                  $temp = $arr['temp'];$time = $arr['timestamp'];
-          }
-        }
-        mysql_close($con);
-            $reply = "我亲爱的主人：您好\n温度为：{$temp}°\n更新时间为：{$time}";
-        }
-																				//开的控制
-        
-        else if (strstr($content, "开")) {
+    
+        if (strstr($content, "1ON")) {
         $con = mysql_connect(SAE_MYSQL_HOST_M.':'.SAE_MYSQL_PORT,SAE_MYSQL_USER,SAE_MYSQL_PASS); 
         $dati = date("h:i:sa");
-        mysql_select_db("app_smart8266", $con);//修改数据库名
+        mysql_select_db("app_steemitcha0s0000", $con);//修改数据库名
  
         $sql ="UPDATE switch SET timestamp='$dati',state = '1'
         WHERE ID = '1'";//修改开关状态值
@@ -192,17 +175,17 @@
        		 }else
              {
                 mysql_close($con);
-                $reply = "好哒大大!!\n已经开了！";
+                $reply = "I am going to switch on the LED 1";
              }
         }
-        																				//关的控制
+        																				
         
-        else if (strstr($content, "关")) {
+        else  if (strstr($content, "1OFF")) {
         $con = mysql_connect(SAE_MYSQL_HOST_M.':'.SAE_MYSQL_PORT,SAE_MYSQL_USER,SAE_MYSQL_PASS); 
         $dati = date("h:i:sa");
-        mysql_select_db("app_smart8266", $con);//修改数据库名
+        mysql_select_db("app_steemitcha0s0000", $con);//修改数据库名
  
-        $sql ="UPDATE switch SET timestamp='$dati',state = '0'
+        $sql ="UPDATE switch SET timestamp='$dati',state = '2'
         WHERE ID = '1'";//修改开关状态值
              if(!mysql_query($sql,$con))
              {
@@ -210,11 +193,113 @@
        		 }else
              {
                 mysql_close($con);
-                $reply = "好哒大大!!\n已经关了！";
+                $reply = "I am going to switch off the LED 1";
              }
         }
         
+        else  if (strstr($content, "2ON")) {
+        $con = mysql_connect(SAE_MYSQL_HOST_M.':'.SAE_MYSQL_PORT,SAE_MYSQL_USER,SAE_MYSQL_PASS); 
+        $dati = date("h:i:sa");
+        mysql_select_db("app_steemitcha0s0000", $con);//修改数据库名
+ 
+        $sql ="UPDATE switch SET timestamp='$dati',state = '3'
+        WHERE ID = '1'";//修改开关状态值
+             if(!mysql_query($sql,$con))
+             {
+            	die('Error: ' . mysql_error());
+       		 }else
+             {
+                mysql_close($con);
+                $reply = "I am going to switch on the LED 2";
+             }
+        }
+        
+        else  if (strstr($content, "2OFF")) {
+        $con = mysql_connect(SAE_MYSQL_HOST_M.':'.SAE_MYSQL_PORT,SAE_MYSQL_USER,SAE_MYSQL_PASS); 
+        $dati = date("h:i:sa");
+        mysql_select_db("app_steemitcha0s0000", $con);//修改数据库名
+ 
+        $sql ="UPDATE switch SET timestamp='$dati',state = '4'
+        WHERE ID = '1'";//修改开关状态值
+             if(!mysql_query($sql,$con))
+             {
+            	die('Error: ' . mysql_error());
+       		 }else
+             {
+                mysql_close($con);
+                $reply = "I am going to switch off the LED 2";
+             }
+        }
      
+        else  if (strstr($content, "3ON")) {
+        $con = mysql_connect(SAE_MYSQL_HOST_M.':'.SAE_MYSQL_PORT,SAE_MYSQL_USER,SAE_MYSQL_PASS); 
+        $dati = date("h:i:sa");
+        mysql_select_db("app_steemitcha0s0000", $con);//修改数据库名
+ 
+        $sql ="UPDATE switch SET timestamp='$dati',state = '5'
+        WHERE ID = '1'";//修改开关状态值
+             if(!mysql_query($sql,$con))
+             {
+            	die('Error: ' . mysql_error());
+       		 }else
+             {
+                mysql_close($con);
+                $reply = "I am going to switch on the LED 3";
+             }
+        }
+        
+        else  if (strstr($content, "3OFF")) {
+        $con = mysql_connect(SAE_MYSQL_HOST_M.':'.SAE_MYSQL_PORT,SAE_MYSQL_USER,SAE_MYSQL_PASS); 
+        $dati = date("h:i:sa");
+        mysql_select_db("app_steemitcha0s0000", $con);//修改数据库名
+ 
+        $sql ="UPDATE switch SET timestamp='$dati',state = '6'
+        WHERE ID = '1'";//修改开关状态值
+             if(!mysql_query($sql,$con))
+             {
+            	die('Error: ' . mysql_error());
+       		 }else
+             {
+                mysql_close($con);
+                $reply = "I am going to switch off the LED 3";
+             }
+        }
+        
+        else  if (strstr($content, "4ON")) {
+        $con = mysql_connect(SAE_MYSQL_HOST_M.':'.SAE_MYSQL_PORT,SAE_MYSQL_USER,SAE_MYSQL_PASS); 
+        $dati = date("h:i:sa");
+        mysql_select_db("app_steemitcha0s0000", $con);//修改数据库名
+ 
+        $sql ="UPDATE switch SET timestamp='$dati',state = '7'
+        WHERE ID = '1'";//修改开关状态值
+             if(!mysql_query($sql,$con))
+             {
+            	die('Error: ' . mysql_error());
+       		 }else
+             {
+                mysql_close($con);
+                $reply = "I am going to switch on the LED 4";
+             }
+        }
+        
+        else  if (strstr($content, "4OFF")) {
+        $con = mysql_connect(SAE_MYSQL_HOST_M.':'.SAE_MYSQL_PORT,SAE_MYSQL_USER,SAE_MYSQL_PASS); 
+        $dati = date("h:i:sa");
+        mysql_select_db("app_steemitcha0s0000", $con);//修改数据库名
+ 
+        $sql ="UPDATE switch SET timestamp='$dati',state = '8'
+        WHERE ID = '1'";//修改开关状态值
+             if(!mysql_query($sql,$con))
+             {
+            	die('Error: ' . mysql_error());
+       		 }else
+             {
+                mysql_close($con);
+                $reply = "I am going to switch off the LED 4";
+             }
+        }
+        
+        
         else
         {
         	$url = "http://www.tuling123.com/openapi/api?key=37d8f412ab74af9add0c5a3ce45715e0&info=".$content;
