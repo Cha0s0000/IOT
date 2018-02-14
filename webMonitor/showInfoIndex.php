@@ -74,37 +74,37 @@
                 
 						<div class="counter col_third">
 							<p class="count-unit"> ℃ </p>
-					      	<h2 class="timer count-title" id="count-number_temp" data-to="16.9" data-speed="1500" data-decimals="1"></h2>
+					      	<h2 class="timer count-title" id="count-number_temp" data-to="NaN" data-speed="1500" data-decimals="1"></h2>
 					       	<p class="count-text"> Temperature </font></p>
 						</div>
 						
 						<div class="counter col_third">
 					      	<p class="count-unit"> % </p>
-					      	<h2 class="timer count-title" id="count-number_humi" data-to="84.0" data-speed="1500"></h2>
+					      	<h2 class="timer count-title" id="count-number_humi" data-to="NaN"  data-speed="1500"></h2>
 					     	<p class="count-text"> Humidity </p>
 					    </div>
 					
 					    <div class="counter col_third">
 					      	<p class="count-unit"> Cd </p>
-					      	<h2 class="timer count-title" id="count-number" data-to="暂没上线" data-speed="1500" data-decimals="1"></h2>
+					      	<h2 class="timer count-title" id="count-number_light" data-to="NaN"  data-speed="1500" data-decimals="1"></h2>
 					      	<p class="count-text "> Light </p>
 					    </div>
 					    
 					    <div class="counter col_third">
 					      	<p class="count-unit"> Db </p>
-					      	<h2 class="timer count-title" id="count-number" data-to="暂没上线" data-speed="1500" data-decimals="1"></h2>
+					      	<h2 class="timer count-title" id="count-number_voice" data-to="NaN"  data-speed="1500" data-decimals="1"></h2>
 					     	<p class="count-text "> Voice </p>
 					    </div>
 					
 					    <div class="counter col_third">
 					      	<p class="count-unit"> μg/m3 </p>
-					      	<h2 class="timer count-title" id="count-number" data-to="暂没上线" data-speed="1500" data-decimals="1"></h2>
+					      	<h2 class="timer count-title" id="count-number_airQuality" data-to="NaN"  data-speed="1500" data-decimals="1"></h2>
 					      	<p class="count-text "> Air quality </p>
 					    </div>
 
 					    <div class="counter col_third end">
 					      	<p class="count-unit"> cm </p>
-					      	<h2 class="timer count-title" id="count-number" data-to="暂没上线" data-speed="1500"></h2>
+					      	<h2 class="timer count-title" id="count-number_distance" data-to="NaN"  data-speed="1500"></h2>
 					      	<p class="count-text "> Distance </p>
 					    </div>					    					  
                
@@ -116,10 +116,22 @@
         		<div class="container">
         			<div class="row" style="text-align:center;">
 	        			<!-- 显示Echarts图表highchart -->
-						<div style="height:410px;min-height:100px;margin:0 auto;" id="main"></div>						
+						<div style="height:410px;min-height:100px;margin:0 auto;" id="sensor1"></div>						
             		</div>
             		
             		<hr class="colorgraph mt-100 mb-100">
+
+            		<div class="row" style="text-align:center;">
+	        			<!-- 显示Echarts图表highchart -->
+						<div style="height:410px;min-height:100px;margin:0 auto;" id="sensor2"></div>						
+            		</div>
+
+            		<hr class="colorgraph mt-100 mb-100">
+
+            		<div class="row" style="text-align:center;">
+	        			<!-- 显示Echarts图表highchart -->
+						<div style="height:410px;min-height:100px;margin:0 auto;" id="sensor3"></div>						
+            		</div>
             		            		
             		
         		</div>
@@ -141,12 +153,20 @@
 
 		var temp = document.getElementById('count-number_temp');
 		var humi = document.getElementById('count-number_humi');
+		var light = document.getElementById('count-number_light');
+		var voice = document.getElementById('count-number_voice');
+		var airquality = document.getElementById('count-number_airQuality');
+		var distance = document.getElementById('count-number_distance');
 		var json_temp = 0;
 		var json_humi = 0;
+		var json_light = 0;
+		var json_voice = 0;
+		var json_airquality = 0;
+		var json_distance = 0;
 		setInterval(update,1000);   //每隔10s
 		function update(){
 		    var xht = new XMLHttpRequest();
-		    xht.open('GET','temp_humi.php',true);
+		    xht.open('GET','sensorsData.php',true);
 		    xht.onreadystatechange = function () {
 		        if(xht.status == 200 && xht.readyState ==4){
 		            var str = xht.responseText;
@@ -154,8 +174,16 @@
 		            // alert(json_temp);
 		            json_temp = json1['temp'];
 		            json_humi = json1['humi'];
+	             	json_light = json1['light'];
+		            json_voice = json1['voice'];
+	             	json_airquality = json1['airquality'];
+		            json_distance = json1['distance'];
 		            temp.innerHTML = json_temp;
 		            humi.innerHTML = json_humi;
+		            light.innerHTML = json_light;
+		            voice.innerHTML = json_voice;
+		            airquality.innerHTML = json_airquality;
+		            distance.innerHTML = json_distance;
 		       }
 		    };
 		    xht.send();
@@ -169,9 +197,8 @@
 		    var points = chart.series[0].points;
 		    chart.tooltip.refresh(points[points.length -1]);
 		}
-		var temp_1 = 10.21;
 		// alert(json_temp);
-		$('#main').highcharts({
+		$('#sensor1').highcharts({
 		    chart: {
 		        type: 'spline',
 		        animation: Highcharts.svg, // don't animate in old IE
@@ -197,7 +224,7 @@
 		        }
 		    },
 		    title: {
-		        text: '爱IT观测点'
+		        text: 'Temperature and humidity data graph chart'
 		    },
 		    credits: { 
 				enabled: false //不显示LOGO 
@@ -208,7 +235,7 @@
 		    },
 		    yAxis: {
 		        title: {
-		            text: '值'
+		            text: 'value'
 		        },
 		        plotLines: [{
 		            value: 0,
@@ -231,7 +258,7 @@
 		    },
 		    series: [
 		    {
-		        name: '温度',
+		        name: 'Temperature',
 		        data: (function () {
 		            // generate an array of random data
 		            var data = [],
@@ -244,10 +271,11 @@
 		                });
 		            }
 		            return data;
-		        }())
+		        }()),
+	        	color:'#ff0100'
 		    },
 		     {
-		        name: '湿度',
+		        name: 'Humidity',
 		        data: (function () {
 		            // generate an array of random data
 		            var data = [],
@@ -266,6 +294,199 @@
 		    activeLastPointToolip(c)
 		});
 
+		$('#sensor2').highcharts({
+		    chart: {
+		        type: 'spline',
+		        animation: Highcharts.svg, // don't animate in old IE
+		        marginRight: 10,
+		        events: {
+		            load: function () {
+
+		                // set up the updating of the chart each second
+		                var series_temp = this.series[0],
+		               		series_humi = this.series[1],
+		                    chart = this;
+		                setInterval(function () {
+		                    var x = (new Date()).getTime(), // current time
+		                        y_temp = json_light,
+		                        y_humi = json_voice;
+		                    // alert(y_temp);
+		                    series_temp.addPoint([x, y_temp], true, true);
+		                    series_humi.addPoint([x, y_humi], true, true);
+		                    activeLastPointToolip(chart);
+		                    // update();
+		                }, 1000);
+		            }
+		        }
+		    },
+		    title: {
+		        text: 'Light and voice data graph chart'
+		    },
+		    credits: { 
+				enabled: false //不显示LOGO 
+			},
+		    xAxis: {
+		        type: 'datetime',
+		        tickPixelInterval: 150
+		    },
+		    yAxis: {
+		        title: {
+		            text: 'value'
+		        },
+		        plotLines: [{
+		            value: 0,
+		            width: 1,
+		            color: '#808080'
+		        }]
+		    },
+		    tooltip: {
+		        formatter: function () {
+		            return '<b>' + this.series.name + '</b><br/>' +
+		                Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' +
+		                Highcharts.numberFormat(this.y, 2);
+		        }
+		    },
+		    legend: {
+		        enabled: false
+		    },
+		    exporting: {
+		        enabled: false
+		    },
+		    series: [
+		    {
+		        name: 'Light',
+		        data: (function () {
+		            // generate an array of random data
+		            var data = [],
+		                time = (new Date()).getTime(),
+		                i;
+		            for (i = -19; i <= 0; i += 1) {
+		                data.push({
+		                    x: time + i * 1000,
+		                    y: Math.random()
+		                });
+		            }
+		            return data;
+		        }()),
+	        	color:'#006400'
+		    },
+		     {
+		        name: 'Voice',
+		        data: (function () {
+		            // generate an array of random data
+		            var data = [],
+		                time = (new Date()).getTime(),
+		                i;
+		            for (i = -19; i <= 0; i += 1) {
+		                data.push({
+		                    x: time + i * 1000,
+		                    y: Math.random()
+		                });
+		            }
+		            return data;
+		        }()),
+	        	color:'#FF00FF'
+		    },
+		    ]
+		}, function(c) {
+		    activeLastPointToolip(c)
+		});
+
+		$('#sensor3').highcharts({
+		    chart: {
+		        type: 'spline',
+		        animation: Highcharts.svg, // don't animate in old IE
+		        marginRight: 10,
+		        events: {
+		            load: function () {
+
+		                // set up the updating of the chart each second
+		                var series_temp = this.series[0],
+		               		series_humi = this.series[1],
+		                    chart = this;
+		                setInterval(function () {
+		                    var x = (new Date()).getTime(), // current time
+		                        y_temp = json_airquality,
+		                        y_humi = json_distance;
+		                    // alert(y_temp);
+		                    series_temp.addPoint([x, y_temp], true, true);
+		                    series_humi.addPoint([x, y_humi], true, true);
+		                    activeLastPointToolip(chart);
+		                    // update();
+		                }, 1000);
+		            }
+		        }
+		    },
+		    title: {
+		        text: 'Airquality and distance data graph chart'
+		    },
+		    credits: { 
+				enabled: false //不显示LOGO 
+			},
+		    xAxis: {
+		        type: 'datetime',
+		        tickPixelInterval: 150
+		    },
+		    yAxis: {
+		        title: {
+		            text: 'value'
+		        },
+		        plotLines: [{
+		            value: 0,
+		            width: 1,
+		            color: '#808080'
+		        }]
+		    },
+		    tooltip: {
+		        formatter: function () {
+		            return '<b>' + this.series.name + '</b><br/>' +
+		                Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' +
+		                Highcharts.numberFormat(this.y, 2);
+		        }
+		    },
+		    legend: {
+		        enabled: false
+		    },
+		    exporting: {
+		        enabled: false
+		    },
+		    series: [
+		    {
+		        name: 'Airquality',
+		        data: (function () {
+		            // generate an array of random data
+		            var data = [],
+		                time = (new Date()).getTime(),
+		                i;
+		            for (i = -19; i <= 0; i += 1) {
+		                data.push({
+		                    x: time + i * 1000,
+		                    y: Math.random()
+		                });
+		            }
+		            return data;
+		        }())
+		    },
+		     {
+		        name: 'Distance',
+		        data: (function () {
+		            // generate an array of random data
+		            var data = [],
+		                time = (new Date()).getTime(),
+		                i;
+		            for (i = -19; i <= 0; i += 1) {
+		                data.push({
+		                    x: time + i * 1000,
+		                    y: Math.random()
+		                });
+		            }
+		            return data;
+		        }())
+		    },
+		    ]
+		}, function(c) {
+		    activeLastPointToolip(c)
+		});
 		
     </script>
 		
