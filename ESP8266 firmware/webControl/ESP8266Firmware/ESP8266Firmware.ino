@@ -5,6 +5,7 @@
 #define STATE_GREEN 12
 #define STATE_RED 15
 #define AIRKISS 4
+#include <dht11.h>  
 int led_state = HIGH;
 bool ledState = 0;
 const char* host = "192.168.0.102";
@@ -16,9 +17,65 @@ int data_pm , data_co, data_pwm, data_temp, data_switch, switch_one, switch_two,
 int data_length = 0;
 unsigned char sign = 0;
 int flip_count = 0;
+
+//sensors  Pins
+int AirQualityPin = 13;
+int Temp&HumiPin = 12;
+int VoicePin = 14;
+int DistancePin = 16;
+int LightPin = 15;
+//sensors data
+float AirQuality = 0;  
+float temp=0;
+float humi=0;
+int Distance=0;
+int Voice=0;
+int Light=0;
 WiFiClient client;
 Ticker flipper;
+dht11 DHT11;  
 
+void getAirQuality()
+{
+   AirQuality = analogRead(AirQualityPin);  
+   Serial.print("getAirQuality running.Get data :");
+   Serial.println(AirQuality);
+  }
+void getDistance()
+{
+   Distance = analogRead(DistancePin);  
+   Serial.print("getDistance running.Get data :");
+   Serial.println(Distance);
+  }
+void  getVoice()
+{
+   Voice = analogRead(VoicePin);  
+   Serial.print("getVoice running.Get data :");
+   Serial.println(Voice);
+  }
+void  getLight()
+{
+   Light = analogRead(LightPin);  
+   Serial.print("getLight running.Get data :");
+   Serial.println(Light);
+  }
+
+void getHumi()
+{
+  DHT11.read(Temp&HumiPin);  
+  humi = (float)DHT11.humidity;
+  Serial.print("getHumi running.Get data :");
+  Serial.println(humi);
+  }
+  
+void getTemp()
+{
+  DHT11.read(Temp&HumiPin);  
+  temp = (float)DHT11.temperature;
+  Serial.print("getTemp running.Get data :");
+  Serial.println(temp);
+  }
+  
 void flip()
 {
   digitalWrite(STATE_BLUE, led_state);
@@ -200,17 +257,18 @@ void setup() {
 }
 
 void loop() {
-
-//  data_receive();
-   client.print(String("AA") + ID + String("BB") + data_pm +
-                 String("CC") + data_co + String("DD") + data_pwm +
-                 String("EE") + data_temp + String("FF") + data_switch +
-                 String("GG") + check_data +  String("HH"));
+   getAirQuality();
+   getDistance();
+   getVoice();
+   getLight();
+   getHumi();
+   getTemp();
+   client.print(String("AA") + ID + String("BB") + AirQuality +
+                 String("CC") + Distance + String("DD") + Voice +
+                 String("EE") + Light + String("FF") + Humi +
+                 String("GG") + Temp +  String("HH"));
 
 
   connTick();
-  //  client.print("ok");
-//  delay(1000);
-
 
 }
