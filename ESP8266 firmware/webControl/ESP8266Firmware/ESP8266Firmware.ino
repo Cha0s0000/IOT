@@ -20,7 +20,7 @@ int flip_count = 0;
 
 //sensors  Pins
 int AirQualityPin = 13;
-int Temp&HumiPin = 12;
+int TempHumiPin = 12;
 int VoicePin = 14;
 int DistancePin = 16;
 int LightPin = 15;
@@ -62,7 +62,7 @@ void  getLight()
 
 void getHumi()
 {
-  DHT11.read(Temp&HumiPin);  
+  DHT11.read(TempHumiPin);  
   humi = (float)DHT11.humidity;
   Serial.print("getHumi running.Get data :");
   Serial.println(humi);
@@ -70,7 +70,7 @@ void getHumi()
   
 void getTemp()
 {
-  DHT11.read(Temp&HumiPin);  
+  DHT11.read(TempHumiPin);  
   temp = (float)DHT11.temperature;
   Serial.print("getTemp running.Get data :");
   Serial.println(temp);
@@ -265,8 +265,8 @@ void loop() {
    getTemp();
    client.print(String("AA") + ID + String("BB") + AirQuality +
                  String("CC") + Distance + String("DD") + Voice +
-                 String("EE") + Light + String("FF") + Humi +
-                 String("GG") + Temp +  String("HH"));
+                 String("EE") + Light + String("FF") + humi +
+                 String("GG") + temp +  String("HH"));
 
 
   connTick();
