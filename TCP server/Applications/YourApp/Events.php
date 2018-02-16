@@ -35,43 +35,39 @@ class Events
        {
           
           $ID_bf = "AA";
-          $pm_bf = "BB";
-          $co_bf = "CC";
-          $pwm_bf = "DD";
-          $temp_bf = "EE";
-          $switch_bf = "FF";
-          $checkdata_bf = "GG";
+          $airQuality_bf = "BB";
+          $distance_bf = "CC";
+          $voice_bf = "DD";
+          $light_bf = "EE";
+          $humi_bf = "FF";
+          $temp_bf = "GG";
           $end = "HH";
 
 
           $ID_loc = strpos($message, $ID_bf);
-          $pm_loc = strpos($message, $pm_bf);
-          $co_loc = strpos($message, $co_bf);
-          $pwm_loc = strpos($message, $pwm_bf);
-          $temp_loc = strpos($message, $temp_bf);
-          $switch_loc = strpos($message, $switch_bf);
-          $checkdata_loc = strpos($message, $checkdata_bf);
+          $airQuality_loc = strpos($message, $pm_bf);
+          $distance_loc = strpos($message, $co_bf);
+          $voice_loc = strpos($message, $pwm_bf);
+          $light_loc = strpos($message, $temp_bf);
+          $humi_loc = strpos($message, $switch_bf);
+          $temp_loc = strpos($message, $checkdata_bf);
           $end_loc = strpos($message, $end);
 
 
-          $data_ID = substr($message,$ID_loc+2,$pm_loc-$ID_loc-2);
+          $data_ID = substr($message,$ID_loc+2,$airQuality_loc-$ID_loc-2);
           $data_ID = trim($data_ID);
-          $data_pm = substr($message,$pm_loc+2,$co_loc-$pm_loc-2);
-          $data_co = substr($message,$co_loc+2,$pwm_loc-$co_loc-2);
-          $data_pwm = substr($message,$pwm_loc+2,$temp_loc-$pwm_loc-2);
-          $data_temp = substr($message,$temp_loc+2,$switch_loc-$temp_loc-2);
-          $data_switch = substr($message,$switch_loc+2,$checkdata_loc-$switch_loc-2);
-          $data_checkdata = substr($message,$checkdata_loc+2,$end_loc-$checkdata_loc-2);
-          // $data_switch_one = 1;
-          // $data_switch_two = 1;
-          // $data_switch_three = 1;
-          // $data_switch_four = 1;
-          // $data_switch_mode = 1;
-          $data_switch_one = $data_switch >> 4;
-          $data_switch_two = ($data_switch - $data_switch_one * 16) >> 3;
-          $data_switch_three = ($data_switch - $data_switch_two * 8 - $data_switch_one * 16) >> 2;
-          $data_switch_four = ($data_switch - $data_switch_two * 8 - $data_switch_one * 16 - $data_switch_three * 4) >> 1;
-          $data_switch_mode = ($data_switch - $data_switch_two * 8 - $data_switch_one * 16 - $data_switch_three * 4 - $data_switch_four * 2) >> 0;
+          $data_airQuality = substr($message,$airQuality_loc+2,$distance_loc-$airQuality_loc-2);
+          $data_distance = substr($message,$distance_loc+2,$voice_loc-$distance_loc-2);
+          $data_voice = substr($message,$voice_loc+2,$light_loc-$voice_loc-2);
+          $data_light = substr($message,$light_loc+2,$humi_loc-$light_loc-2);
+          $data_humi = substr($message,$humi_loc+2,$temp_loc-$humi_loc-2);
+          $data_temp = substr($message,$temp_loc+2,$end_loc-$temp_loc-2);
+
+          // $data_switch_one = $data_switch >> 4;
+          // $data_switch_two = ($data_switch - $data_switch_one * 16) >> 3;
+          // $data_switch_three = ($data_switch - $data_switch_two * 8 - $data_switch_one * 16) >> 2;
+          // $data_switch_four = ($data_switch - $data_switch_two * 8 - $data_switch_one * 16 - $data_switch_three * 4) >> 1;
+          // $data_switch_mode = ($data_switch - $data_switch_two * 8 - $data_switch_one * 16 - $data_switch_three * 4 - $data_switch_four * 2) >> 0;
 
           $check_exist_sql = "SELECT * from device WHERE ID = $data_ID";
           $check_exist_result = mysql_query($check_exist_sql);
@@ -79,35 +75,35 @@ class Events
           // =============================================================修改成query 结果=====================
           if(!$check_exist)
           {
-            $insert_sql = "INSERT INTO device (ID,data_pm,data_co,data_pwm,data_temp,data_switch_one,data_switch_two,data_switch_three,data_switch_four,data_switch_mode,client_id,timestamp,online_or_not) values ('$data_ID','$data_pm','$data_co','$data_pwm','$data_temp','$data_switch_one','$data_switch_two','$data_switch_three','$data_switch_four','$data_switch_mode','$client_id','$dati','1')";
+            $insert_sql = "INSERT INTO device (ID,data_airQuality,data_distance,data_voice,data_light,data_humi,data_temp,client_id,timestamp,online_or_not) values ('$data_ID','$data_airQuality','$data_distance','$data_voice','$data_light','$data_humi','$data_temp','$client_id','$dati','1')";
             $insert_reslut = mysql_query($insert_sql);
 
-            $insert_pm = "INSERT into data_pm (ID,data_pm,timestamp) values ('$data_ID','$data_pm','$dati')";
-            mysql_query($insert_pm);
+            // $insert_pm = "INSERT into data_pm (ID,data_pm,timestamp) values ('$data_ID','$data_pm','$dati')";
+            // mysql_query($insert_pm);
 
-            $insert_co = "INSERT into data_co (ID,data_co,timestamp) values ('$data_ID','$data_co','$dati')";
-            mysql_query($insert_co);
+            // $insert_co = "INSERT into data_co (ID,data_co,timestamp) values ('$data_ID','$data_co','$dati')";
+            // mysql_query($insert_co);
 
-            $insert_pwm = "INSERT into data_pwm (ID,data_pwm,timestamp) values ('$data_ID','$data_pwm','$dati')";
-            mysql_query($insert_pwm);
+            // $insert_pwm = "INSERT into data_pwm (ID,data_pwm,timestamp) values ('$data_ID','$data_pwm','$dati')";
+            // mysql_query($insert_pwm);
 
-            $insert_temp = "INSERT into data_temp (ID,data_temp,timestamp) values ('$data_ID','$data_temp','$dati')";
-            mysql_query($insert_temp);
+            // $insert_temp = "INSERT into data_temp (ID,data_temp,timestamp) values ('$data_ID','$data_temp','$dati')";
+            // mysql_query($insert_temp);
 
-            $insert_switch = "INSERT into data_pm (ID,data_switch_one,data_switch_two,data_switch_three,data_switch_four,data_switch_mode,timestamp) values ('$data_ID','$data_switch_one','$data_switch_two','$data_switch_three','$data_switch_four','$data_switch_mode',$dati')";
-            mysql_query($insert_switch);
+            // $insert_switch = "INSERT into data_pm (ID,data_switch_one,data_switch_two,data_switch_three,data_switch_four,data_switch_mode,timestamp) values ('$data_ID','$data_switch_one','$data_switch_two','$data_switch_three','$data_switch_four','$data_switch_mode',$dati')";
+            // mysql_query($insert_switch);
 
 
           }
           else
           {
-             $update_sql = "UPDATE device SET client_id = '$client_id',data_pm = '$data_pm',data_co = '$data_co',data_pwm = '$data_pwm',data_temp = '$data_temp',data_switch_one = '$data_switch_one',data_switch_two = '$data_switch_two',data_switch_three = '$data_switch_three',data_switch_four = '$data_switch_four',data_switch_mode = '$data_switch_mode',timestamp = '$dati' WHERE ID = $data_ID ";
+             $update_sql = "UPDATE device SET client_id = '$client_id',data_airQuality = '$data_airQuality',data_distance = '$data_distance',data_voice = '$data_voice',data_light = '$data_light',data_humi = '$data_humi',data_temp = '$data_temp',timestamp = '$dati' WHERE ID = $data_ID ";
              
              $result_update = mysql_query($update_sql);
           }
 
            // GateWay::sendToAll("$message\r\n");
-          // Gateway::sendToAll("$client_id info\r\n ID is: $data_ID\r\n pm is :$data_pm\r\n co is : $data_co\r\n pwm is :$data_pwm\r\n temp is :$data_temp\r\n switch_1 is :$data_switch_one\r\n switch_2 is :$data_switch_two\r\n switch_3 is :$data_switch_three\r\n switch_4 is :$data_switch_four\r\n switch_mode is :$data_switch_mode\r\n checkdata is : $data_checkdata\r\n others:\r\n");
+
        }
         
         // WEB的控制反馈给8266
@@ -143,7 +139,7 @@ class Events
             case "pwm_100": $control_cmd = "F";break;
 
           }
-          // Gateway::sendToAll("$client_id say  $control_cmd");
+          Gateway::sendToAll("$client_id say  {{$control_cmd}}");
           Gateway::sendToClient($device_client_id, "{{$control_cmd}}");
         }
 
