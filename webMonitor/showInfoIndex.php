@@ -1,3 +1,15 @@
+<?php
+	header("Content-type: text/html; charset=utf-8"); 
+	include_once("conn.php"); 
+	session_start();
+
+	if(!isset($_SESSION['username']))
+	{
+		echo "<script>alert('please login first')</script>";
+		echo '<script language=javascript>window.location.href="login.php"</script>'; 
+		exit();
+	}
+?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html lang="zh-CN">
 	<head>
