@@ -32,6 +32,12 @@ class Sensorsdata extends Controller
             
             // return $this->fetch();
         else
-            echo "您好： " . cookie('username') . ', <a href="' . url('login/loginout') . '">退出</a>';
+        {
+            $this->error('Please login first');
+            $this->redirect(url('login/index'));
+        }
+           
+
     }   
+        }
 }
